@@ -6,21 +6,15 @@ const sql = require('../../sql');
 
 describe("Test 'users' table",()=>{
   let uid;
-  let drop = true;
-  beforeEach(done=>{
-    if(drop) {
+  beforeAll(done=>{
       sql.test.users.create()
-        .then(res => {
-          expect(res).toBeTruthy();
+        .then(() => {
           done();
         })
         .catch(err => {
-          fail(err.message);
+          console.log(err.message);
           done();
         });
-    }
-    else
-      done();
   });
 
   it("should add a row to table", done=>{
@@ -28,7 +22,6 @@ describe("Test 'users' table",()=>{
       .then(res=>{
         expect(typeof res.uid).toBe('number');
         uid = res.uid;
-        drop = false;
         done();
       })
       .catch(err=>{
@@ -70,21 +63,18 @@ describe("Test 'users' table",()=>{
       sql.test.users.get({name:'Hadi Alavi'})
         .then(res=>{
           expect(res[0].uid).toBe(uid);
-          drop = true;
           done();
         })
         .catch(err=>{
           fail(err.message);
-          drop = true;
           done();
         });
     }
   });
 
-  afterEach((done)=>{
-    if(drop)
-      sql.test.users.drop().then(res=>{expect(res).toBeTruthy();done()}).catch(err=>{fail(err.message);done()});
-    else
-      done();
+  afterAll((done)=>{
+    if(uid)
+      sql.test.users.drop().then(res=>done()).catch(err=>{console.log(err.message);done()});
+    else done();
   });
 });
