@@ -2,14 +2,12 @@
  * Created by Amin on 31/01/2017.
  */
 const env = require('./env');
-const connectionString = env.config.pgConnection;
+const sql = require('./sql');
 const promise = require('bluebird');
 const options = {promiseLib: promise};
-const pgp = require('pg-promise')(options);
-const db = pgp(connectionString);
 
 function dbTestCreate(){
-  db.query('create database ' + env.test_db_name)
+  sql.db.create({dbName: env.test_db_name},true)
     .then(res=>{
       console.log(res);
       process.exit();
@@ -20,14 +18,14 @@ function dbTestCreate(){
     });
 }
 
-db.query('create database ' + env.db_name)
+sql.db.create({dbName: env.db_name})
   .then(res=>{
     console.log(res);
-    if(app.get('env')==='development')
+    if(env.isDev)
       dbTestCreate();
   })
   .catch(err=>{
     console.log(err.message);
-    if(app.get('env')==='development')
+    if(env.isDev)
       dbTestCreate();
   });

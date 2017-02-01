@@ -1,22 +1,46 @@
 const promise = require('bluebird');
 const bCrypt = require('bcrypt-nodejs');
-const options = {promiseLib: promise};
+const options = {
+  promiseLib: promise,
+};
 const pgp = require('pg-promise')(options);
 const app = require('express')();
-const config = require('./config.json')[app.get('env')];
+const env = app.get('env');
+const isProd = env==='production';
+const isDev  = env==='development';
+const config = require('./config.json')[env];
 const connectionString = config.pgConnection + config.database;
 const test_db_name = config.database + '_test';
 const testConnectionString = config.pgConnection + test_db_name;
 const db = pgp(connectionString);
 const testDb = pgp(testConnectionString);
+const pgm = require('pg-monitor');
+const color = require("cli-color");
+
+const pgmTheme = {
+    time: color.bgBlack.whiteBright,
+    value: color.black,
+    cn: color.black.bold,
+    tx: color.cyan,
+    paramTitle: color.magenta,
+    errorTitle: color.redBright,
+    query: color.bgBlue.whiteBright.bold,
+    special: color.bgYellowBright.black.bold,
+    error: color.red
+  };
+pgm.setTheme(pgmTheme); // selecting your own theme;
+pgm.attach(options);
 
 module.exports = {
   bcrypt: bCrypt,
   pgp: pgp,
+  pgm: pgm,
   app: app,
   config: config,
   db: db,
   testDb : testDb,
   db_name: config.database,
-  test_db_name: test_db_name
+  test_db_name: test_db_name,
+  isProd: isProd,
+  isDev: isDev,
 };
