@@ -52,11 +52,19 @@ genericUpdate = (tableName,idColumn,isTest)=> {
   };
 };
 
+genericSelect = (tableName,isTest)=> {
+  let db = isTest ? env.testDb : env.db;
+  return () => {
+    return db.query(`select * from ${tableName}`);
+  };
+};
+
 let tablesWithSqlCreatedByHelpers = [
   {
     name: 'users',
     insert: true,
     update: true,
+    select: true,
     idColumn: 'uid',
   },
 ];
@@ -76,6 +84,11 @@ tablesWithSqlCreatedByHelpers.forEach((table)=>{
   if(table.update) {
     wrappedSQL[table.name].update       = genericUpdate(table.name, table.idColumn, false);
     wrappedSQL.test[table.name].update  = genericUpdate(table.name, table.idColumn, true);
+  }
+
+  if(table.select) {
+    wrappedSQL[table.name].select       = genericUpdate(table.name, false);
+    wrappedSQL.test[table.name].select  = genericUpdate(table.name, true);
   }
 });
 

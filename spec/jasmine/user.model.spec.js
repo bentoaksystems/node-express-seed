@@ -30,7 +30,7 @@ describe("User model",()=>{
     u.load(name,pwd)
       .then(res=> {
         expect(res.uid).toBe(uid);
-        expect(u.user_id).toBe(uid);
+        expect(u.uid).toBe(uid);
         done()
       })
       .catch(err=> {
@@ -84,7 +84,7 @@ describe("User model",()=>{
   it("should reload the user after saving",done=>{
     newU.load(name+'.x',pwd)
       .then(()=>{
-        expect(newU.user_id).toBe(uid);
+        expect(newU.uid).toBe(uid);
         done();
       })
       .catch(err=>{
@@ -92,7 +92,7 @@ describe("User model",()=>{
         done();
       })
   });
-  it("should matches password after hashing",done=>{
+  it("should match password after hashing",done=>{
     newU.checkPassword()
       .then(()=>{
         done();
@@ -100,6 +100,18 @@ describe("User model",()=>{
       .catch(err=>{
         fail(err);
         done()
+      });
+  });
+  it("should mismatch wrong password",done=>{
+    newU.password+='x';
+    newU.checkPassword()
+      .then(()=>{
+        fail('It matches!');
+        done();
+      })
+      .catch(err=>{
+        expect(err.message).toBe('Incorrect password');
+        done();
       });
   });
   it("should not be an admin",()=>{
