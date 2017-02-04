@@ -28,7 +28,7 @@ for(let table in rawSql) {
   wrappedSQL.test[table]={};
   for (let query in rawSql[table]) {
     wrappedSQL[table][query] = (data)=>{
-      return (env.db[usingFunction(query)])(rawSql[table][query],data);
+      return ((table==='db'?env.initDb:env.db)[usingFunction(query)])(rawSql[table][query],data);
     };
     wrappedSQL.test[table][query] = (data)=>{
       return (env.testDb[usingFunction(query)])(rawSql[table][query],data);
@@ -38,22 +38,24 @@ for(let table in rawSql) {
 /*
 * Additional SQLs created by helpers go here
 */
+chooseDb = (tableName,isTest) =>  tableName==='db'? env.initDb : (isTest ? env.testDb : env.db);
+
 genericInsert = (tableName,idColumn,isTest)=>{
-  let db = isTest ? env.testDb : env.db;
+  let db = chooseDb(tableName,isTest);
   return (data)=>{
     return db.one(env.pgp.helpers.insert(data,null,tableName) + ' returning ' + idColumn);
   }
 };
 
 genericUpdate = (tableName,idColumn,isTest)=> {
-  let db = isTest ? env.testDb : env.db;
+  let db = chooseDb(tableName,isTest);
   return (data, id) => {
     return db.query(env.pgp.helpers.update(data, null, tableName) + ` where ${idColumn}=` + id);
   };
 };
 
 genericSelect = (tableName,isTest)=> {
-  let db = isTest ? env.testDb : env.db;
+  let db = chooseDb(tableName,isTest);
   return () => {
     return db.query(`select * from ${tableName}`);
   };

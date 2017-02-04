@@ -28,7 +28,7 @@ describe('SqlTable abstract class',()=>{
   });
 
 
-  it("should throw error on 'exorttData'",()=>{
+  it("should throw error on 'exportData'",()=>{
     let test = ()=>instance.exportData();
     expect(test).toThrowError(TypeError,"exportData is not implemented");
   });

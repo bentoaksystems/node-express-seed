@@ -1,11 +1,13 @@
-const promise = require('bluebird');
+const promise = Promise;
 const bCrypt = require('bcrypt-nodejs');
 const options = {
   promiseLib: promise,
 };
 const pgp = require('pg-promise')(options);
 const app = require('express')();
-const env = app.get('env');
+let env = app.get('env');
+if(env==='test')
+  env='development';
 const isProd = env==='production';
 const isDev  = env==='development';
 const config = require('./config.json')[env];
@@ -39,9 +41,9 @@ module.exports = {
   config: config,
   db: db,
   testDb : testDb,
+  initDb: pgp(config.pgConnection),
   db_name: config.database,
   test_db_name: test_db_name,
   isProd: isProd,
   isDev: isDev,
-  promise: promise,
 };

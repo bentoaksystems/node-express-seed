@@ -3,8 +3,7 @@
  */
 const env = require('./env');
 const sql = require('./sql');
-const promise = require('bluebird');
-const options = {promiseLib: promise};
+const promise = Promise;
 
 function dbTestCreate(){
   sql.db.create({dbName: env.test_db_name},true)

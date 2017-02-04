@@ -1,1 +1,1 @@
-select * from users where name=${name}
+select * from users where lower(name)=lower(${name})

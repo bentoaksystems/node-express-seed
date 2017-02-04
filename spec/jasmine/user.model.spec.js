@@ -14,7 +14,7 @@ describe("User model",()=>{
   beforeAll(done=>{
     sql.test.users.create()
       .then(() => {
-        sql.test.users.add({name: name})
+        sql.test.users.add({name: name.toLowerCase()})
           .then(res=>{
             uid = res.uid;
             done();
@@ -50,10 +50,10 @@ describe("User model",()=>{
       });
   });
 
-  it("should hashes password",done=>{
+  it("should save user",done=>{
     u.exportData()
       .then((data)=>{
-        expect(data.name).toBe(name);
+        expect(data.name).toBe(name.toLowerCase());
         expect(data.secret).toBeTruthy();
         expect(data.secret===pwd).toBeFalsy();
         done();
@@ -114,12 +114,36 @@ describe("User model",()=>{
         done();
       });
   });
+  it("should login with different letter case of username",done=>{
+    newU = new User(true);
+    newU.login({username:name.toLowerCase()+'.X',password:pwd})
+      .then(()=>{
+        expect(true).toBeTruthy();
+        done();
+      })
+      .catch(err=>{
+        fail(err.message);
+        done();
+      })
+  });
+  it("should login with correct password",done=>{
+    newU = new User(true);
+    newU.login({username:name+'.x',password:pwd})
+      .then(()=>{
+        expect(true).toBeTruthy();
+        done();
+      })
+      .catch(err=> {
+        fail(err.message);
+        done();
+      })
+  });
   it("should not be an admin",()=>{
     expect(newU.is_admin).toBe(false);
   });
   it("should maintain unique name",done=>{
     u = new User(true);
-    u.username=name+'.x';
+    u.username=name.toLowerCase()+'.x';
     u.save()
       .then(()=>{
         fail('inserted the same name twice');
@@ -143,10 +167,5 @@ describe("User model",()=>{
         expect(err.message).toBe('No password is set up');
         done();
       })
-  });
-  afterAll((done)=>{
-    if(uid)
-      sql.test.users.drop().then(()=>done()).catch(err=>{console.log(err.message);done()});
-    else done();
   });
 });
