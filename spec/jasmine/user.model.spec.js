@@ -30,6 +30,7 @@ describe("User model",()=>{
     u.load(name,pwd)
       .then(res=> {
         expect(res.uid).toBe(uid);
+        expect(u.user_id).toBe(uid);
         done()
       })
       .catch(err=> {
@@ -44,7 +45,7 @@ describe("User model",()=>{
         done();
       })
       .catch(err=>{
-        expect(err).toBe("No password set up");
+        expect(err.message).toBe("No password is set up");
         done()
       });
   });
@@ -101,7 +102,36 @@ describe("User model",()=>{
         done()
       });
   });
-
+  it("should not be an admin",()=>{
+    expect(newU.is_admin).toBe(false);
+  });
+  it("should maintain unique name",done=>{
+    u = new User(true);
+    u.username=name+'.x';
+    u.save()
+      .then(()=>{
+        fail('inserted the same name twice');
+        done();
+      })
+      .catch((err)=>{
+        expect(err.message).toContain('duplicate key value');
+        done();
+      });
+  });
+  it("shoule leave empty secret for empty password",()=>{
+    expect(u.secret).toBe('');
+  });
+  it("should fail to match empty password",done=>{
+    u.checkPassword()
+      .then(()=>{
+        fail('succeeded!');
+        done();
+      })
+      .catch(err=>{
+        expect(err.message).toBe('No password is set up');
+        done();
+      })
+  });
   afterAll((done)=>{
     if(uid)
       sql.test.users.drop().then(()=>done()).catch(err=>{console.log(err.message);done()});
