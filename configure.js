@@ -16,15 +16,15 @@ function dbTestCreate(){
       process.exit();
     });
 }
-
-sql.db.create({dbName: env.db_name})
-  .then(res=>{
-    console.log(res);
-    if(env.isDev)
-      dbTestCreate();
-  })
-  .catch(err=>{
-    console.log(err.message);
-    if(env.isDev)
-      dbTestCreate();
-  });
+if(env.isDev)
+  sql.db.create({dbName: env.db_name})
+    .then(res=>{
+      console.log(res);
+      if(env.isDev)
+        dbTestCreate();
+    })
+    .catch(err=>{
+      console.log(err.message);
+      if(env.isDev)
+        dbTestCreate();
+    });

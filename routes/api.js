@@ -1,6 +1,7 @@
 const lib = require('../lib');
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 
 /* GET api listing. */
 function apiResponse(className, functionName, adminOnly, reqFuncs){
@@ -15,8 +16,8 @@ function apiResponse(className, functionName, adminOnly, reqFuncs){
   };
   return(function(req, res) {
     let user = req.user ? req.user.toLowerCase() : req.user;
-    let test = req.query.test==='tEsT';
-    if(adminOnly && user !== 'admin') {
+    req.test = lib.helpers.isTestReq(req);
+    if(adminOnly && !lib.helpers.adminCheck(user)) {
       res.status(403)
         .send('Only admin can do this.');
     }
@@ -26,7 +27,7 @@ function apiResponse(className, functionName, adminOnly, reqFuncs){
         dynamicArgs.push((typeof reqFuncs[i]==='function') ? reqFuncs[i](req) : deepFind(req,reqFuncs[i]));
 
       args = dynamicArgs.concat(args);
-      let model = new lib[className](test);
+      let model = new lib[className](req.test);
       model[functionName].apply(model, args)
         .then(data=> {
           res.status(200)
@@ -44,7 +45,8 @@ function apiResponse(className, functionName, adminOnly, reqFuncs){
 router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
-
-router.post('/login', apiResponse('User','login',false,['body']));
+router.post('/login', passport.authenticate('local', {}, (req,res)=>res.redirect('/')));
+router.post('/loginCheck', apiResponse('User','loginCheck',false,['body.username','body.password']));
 router.put('/user',apiResponse('User','save',true,['body']));
+
 module.exports = router;

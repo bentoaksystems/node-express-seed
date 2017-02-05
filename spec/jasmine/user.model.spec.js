@@ -116,7 +116,7 @@ describe("User model",()=>{
   });
   it("should login with different letter case of username",done=>{
     newU = new User(true);
-    newU.login({username:name.toLowerCase()+'.X',password:pwd})
+    newU.loginCheck(name.toLowerCase()+'.X',pwd)
       .then(()=>{
         expect(true).toBeTruthy();
         done();
@@ -128,7 +128,7 @@ describe("User model",()=>{
   });
   it("should login with correct password",done=>{
     newU = new User(true);
-    newU.login({username:name+'.x',password:pwd})
+    newU.loginCheck(name+'.x',pwd)
       .then(()=>{
         expect(true).toBeTruthy();
         done();

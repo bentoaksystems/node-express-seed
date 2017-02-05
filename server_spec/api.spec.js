@@ -40,22 +40,31 @@ describe("REST API", ()=>{
         done();
       }
     });
-    it("responds to 'login'", done => {
-      request.post({url: base_url + 'login' + test_query, form:{username:'amin',password:'test'}}, function (error, response) {
+    it("responds to 'loginCheck'", done => {
+      request.post({url: base_url + 'loginCheck' + test_query, form:{username:'amin',password:'test'}}, function (error, response) {
         expect(response.statusCode).toBe(200);
         done();
       });
     });
     it("responds to incorrect login user", done => {
-      request.post({url: base_url + 'login' + test_query, form:{username:'ami',password:'tes'}}, function (error, response) {
+      request.post({url: base_url + 'loginCheck' + test_query, form:{username:'ami',password:'tes'}}, function (error, response) {
         expect(response.statusCode).toBe(400);
         done();
       });
     });
     it("responds to incorrect login password", done => {
-      request.post({url: base_url + 'login' + test_query, form:{username:'amin',password:'tes'}}, function (error, response) {
+      request.post({
+        url: base_url + 'loginCheck' + test_query,
+        form: {username: 'amin', password: 'tes'}
+      }, function (error, response) {
         expect(response.statusCode).toBe(401);
-        teardown = true;
+        done();
+      })
+    });
+    it("doesn't save a new user if it is not admin", done => {
+      request.put({url: base_url + 'user' + test_query, form:{username:'amin',password:'tes'}}, function(err,res){
+        expect(res.statusCode).toBe(403);
+        teardown=true;
         done();
       });
     });

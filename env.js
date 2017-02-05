@@ -14,6 +14,7 @@ const config = require('./config.json')[env];
 const connectionString = config.pgConnection + config.database;
 const test_db_name = config.database + '_test';
 const testConnectionString = config.pgConnection + test_db_name;
+const initDb =  pgp(config.pgConnection + config.initDb);
 const db = pgp(connectionString);
 const testDb = pgp(testConnectionString);
 const pgm = require('pg-monitor');
@@ -41,7 +42,7 @@ module.exports = {
   config: config,
   db: db,
   testDb : testDb,
-  initDb: pgp(config.pgConnection),
+  initDb: initDb,
   db_name: config.database,
   test_db_name: test_db_name,
   isProd: isProd,
