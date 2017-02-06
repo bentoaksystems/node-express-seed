@@ -12,6 +12,7 @@ describe("User model",()=>{
   const pwd = 'testPwd';
 
   beforeAll(done=>{
+    sql.test.users.drop().then(()=>{}).catch(()=>{});
     sql.test.users.create()
       .then(() => {
         sql.test.users.add({name: name.toLowerCase()})
@@ -82,7 +83,7 @@ describe("User model",()=>{
   });
 
   it("should reload the user after saving",done=>{
-    newU.load(name+'.x',pwd)
+    newU.load(name.toUpperCase()+'.X',pwd)
       .then(()=>{
         expect(newU.uid).toBe(uid);
         done();
@@ -155,7 +156,7 @@ describe("User model",()=>{
       });
   });
   it("shoule leave empty secret for empty password",()=>{
-    expect(u.secret).toBe('');
+    expect(u.secret).not.toBeDefined();
   });
   it("should fail to match empty password",done=>{
     u.checkPassword()

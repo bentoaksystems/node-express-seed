@@ -1,14 +1,22 @@
-# Node/Express Seed
-## Basic database setup
-This seed is based its tests on PostgreSQL database connection in local server.
+# Burgista Internal Delivery App
+This app assumes a connection to postgres exists in development server.
 
-Check config.json to ensure the connection is matching your need.
-Choose a meaningful name for 'database' like **my_project**, and run:
-> npm install
+* Change **initDb** in **config.json** to the database that already exists in your Postgres (e.g. 'postgres' in Windows, and your user name in Linux)
+* If you use windows, in **package.json** change npm/test to:
 
-In addition to downloading modules, it will create a pair of databases:
+    _jasmine&jasmine-node server_spec_
 
-* my_project
-* my_project_test
+* If you do not have jasmine or jasmine-node, install them globally:
 
-The latter will be used only for testing purpose.
+    _npm install -g jasmine
+    npm install -g jasmine-node_
+
+* run npm install:
+
+    _npm install_
+
+* at this point you should  be able to run the project:
+_npm start_
+
+* then you should be able to run tests:
+    _npm test_

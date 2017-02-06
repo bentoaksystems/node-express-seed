@@ -21,6 +21,7 @@ module.exports = {
     create: sql('users/create.sql'),
     drop:   sql('users/drop.sql'),
     get:    sql('users/get.sql'),
+    select: sql('users/select.sql'),
   },
   db: {
     create: sql('db/create.sql'),
