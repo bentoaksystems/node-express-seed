@@ -50,8 +50,9 @@ router.get('/', function(req, res) {
 //Login API
 router.post('/login', passport.authenticate('local', {}), (req,res)=>res.sendStatus(200));
 router.post('/loginCheck', apiResponse('User', 'loginCheck', false, ['body.username', 'body.password']));
+router.get('/logout', (req,res)=>{req.logout();res.sendStatus(200)});
 //User API
-router.put('/user', apiResponse('User', 'save', true,['body']));
+router.put('/user', apiResponse('User', 'insert', true, ['body']));
 router.get('/user', apiResponse('User', 'select', true));
 router.post('/user/:uid', apiResponse('User', 'update', true, ['params.uid','body']));
 router.delete('/user/:uid', apiResponse('User', 'delete', true, ['params.uid']));
