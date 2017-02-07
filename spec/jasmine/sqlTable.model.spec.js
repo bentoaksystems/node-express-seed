@@ -109,7 +109,6 @@ describe('SqlTable abstract class',()=>{
       })
       .catch(err=>{
         expect(err.message).toContain('Not unique record');
-        console.log(err.message);
         done();
       })
   });

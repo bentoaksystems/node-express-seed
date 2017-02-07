@@ -1,6 +1,6 @@
 {
   "development": {
-    "initDb":   "",
+    "initDb":   "postgres",
     "database": "seed",
     "pgConnection": "postgres://postgres@localhost:5432/"
   },
