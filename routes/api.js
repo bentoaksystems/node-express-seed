@@ -36,7 +36,7 @@ function apiResponse(className, functionName, adminOnly=false, reqFuncs=[]){
             .json(data);
         })
         .catch(err=> {
-            console.log(`${className}/${functionName}: `, err);
+            console.log(`${className}/${functionName}: `, err.message);
             res.status(err.number||500)
               .send(err.message || err);
           });
