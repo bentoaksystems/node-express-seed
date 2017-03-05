@@ -8,7 +8,7 @@ let bodyParser = require('body-parser');
 let index = require('./routes/index');
 let api   = require('./routes/api');
 let passport = require('passport');
-let passLocal= require('passport-local');
+let PassLocal= require('passport-local');
 let session  = require('express-session');
 let lib      = require('./lib');
 let app = express();
@@ -45,7 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser(lib.User.serialize);
 passport.deserializeUser(lib.User.deserialize);
-passport.use(new passLocal(
+passport.use(new PassLocal(
   {
     passReqToCallback: true,
   },
@@ -67,7 +67,7 @@ app.use(function(err, req, res, next) {
   let jsonError = req.app.get('env') === 'development' ? {
     Message: err.message,
     Stack: err.stack,
-  } : {};
+  } : {Message: err.message};
 
   res.status(err.status || 500).json(jsonError);
   console.log(err);
