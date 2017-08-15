@@ -61,5 +61,6 @@ router.put('/user', apiResponse('User', 'insert', true, ['body']));
 router.get('/user', apiResponse('User', 'select', true));
 router.post('/user/:uid', apiResponse('User', 'update', true, ['params.uid','body']));
 router.delete('/user/:uid', apiResponse('User', 'delete', true, ['params.uid']));
+router.put('/user/message', apiResponse('User', 'socketHandler', false, ['body']));
 
 module.exports = router;
