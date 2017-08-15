@@ -7,11 +7,11 @@ let bodyParser = require('body-parser');
 
 let index = require('./routes/index');
 let api   = require('./routes/api');
-let passport = require('passport');
-let PassLocal= require('passport-local');
-let session  = require('express-session');
 let lib      = require('./lib');
 let app = express();
+
+const passport = require('./passport');
+const session = require('./session');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,32 +25,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//session:
-let sess = {
-  secret: 'HosKhedIDA',
-  cookie: {},
-  resave: true,
-  saveUninitialized: true,
-
-};
-
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1); // trust first proxy
-  sess.cookie.secure = true; // serve secure cookies
-}
-
-app.use(session(sess));
-//Passport:
-app.use(passport.initialize());
-app.use(passport.session());
-passport.serializeUser(lib.User.serialize);
-passport.deserializeUser(lib.User.deserialize);
-passport.use(new PassLocal(
-  {
-    passReqToCallback: true,
-  },
-  lib.User.passportLocalStrategy
-));
+session.setup(app);
+passport.setup(app);
 
 app.use('/', index);
 app.use('/api', api);
@@ -67,7 +43,7 @@ app.use(function(err, req, res, next) {
   let jsonError = req.app.get('env') === 'development' ? {
     Message: err.message,
     Stack: err.stack,
-  } : {Message: err.message};
+  } : {Message: err};
 
   res.status(err.status || 500).json(jsonError);
   console.log(err);

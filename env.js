@@ -10,6 +10,7 @@ if(env==='test')
   env='development';
 const isProd = env==='production';
 const isDev  = env==='development';
+const isTest = env==='development';
 const config = require('./config.json')[env];
 const connectionString = config.pgConnection + config.database;
 const test_db_name = config.database + '_test';
@@ -47,4 +48,5 @@ module.exports = {
   test_db_name: test_db_name,
   isProd: isProd,
   isDev: isDev,
+  isTest: isTest,
 };
