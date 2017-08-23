@@ -1,8 +1,6 @@
 /**
  * Created by ali71 on 05/08/2017.
  */
-const User = require('../lib/user.model');
-const env = require('../env');
 const redis = require('../redis');
 
 //Define namespace without authentication needs
@@ -15,9 +13,10 @@ let setup = (io, socketSessionParser) => {
   //Initialize defined namespaces
   userIO = _io.of('/user');
   let userConnection = userIO.on('connection', socket => {
+
     //Listen on specific event
-    socket.on('bmsg', message => {
-      socket.broadcast.emit('bres', message);
+    socket.on('bmsg', data => {
+      socket.broadcast.emit('brcv', data);
     });
   });
   userConnection.use(socketSessionParser);
@@ -29,7 +28,8 @@ let setup = (io, socketSessionParser) => {
           //Write any code must execute after any clients connected to specific namespace
         });
       }
-  });
+    })
+    .catch(err => console.log('Error: when fetch all namespaces. ', err));
 
   //Define other routes (namespace for socket)
 };
@@ -58,7 +58,7 @@ let isNamespaceExist = (namespace) => {
         else
           reject(null);
       })
-      .catch(err => reject(null))
+      .catch(err => reject(err))
   });
 };
 

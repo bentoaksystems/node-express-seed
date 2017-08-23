@@ -34,7 +34,6 @@ let setup = (http) => {
   io.use(socketSession.parser);
 
   socketRoutes.setup(io, socketSession.parser);
-  socketRoutes.setup(io);
 };
 
 function onAuthorizeSuccess(data, accept) {
