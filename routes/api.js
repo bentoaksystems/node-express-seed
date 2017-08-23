@@ -1,7 +1,7 @@
 const lib = require('../lib');
 const express = require('express');
 const router = express.Router();
-const passport = require('passport');
+const jwt = require('../jwt');
 
 function apiResponse(className, functionName, adminOnly=false, reqFuncs=[]){
   let args = Array.prototype.slice.call(arguments, 4);
@@ -52,7 +52,7 @@ router.get('/', function(req, res) {
   res.send('respond with a resource');
 });
 //Login API
-router.post('/login', passport.authenticate('local', {}), apiResponse('User', 'afterLogin', false, [ 'user.username']));
+router.post('/login', (req, res, next) => {jwt.auth(req, res, next)}, apiResponse('User', 'afterLogin', false, [ 'user.username']));
 router.post('/loginCheck', apiResponse('User', 'loginCheck', false, ['body.username', 'body.password']));
 router.get('/logout', (req,res)=>{req.logout();res.sendStatus(200)});
 router.get('/validUser',apiResponse('User', 'afterLogin', false, ['user.username']));
@@ -61,6 +61,5 @@ router.put('/user', apiResponse('User', 'insert', true, ['body']));
 router.get('/user', apiResponse('User', 'select', true));
 router.post('/user/:uid', apiResponse('User', 'update', true, ['params.uid','body']));
 router.delete('/user/:uid', apiResponse('User', 'delete', true, ['params.uid']));
-router.put('/user/message', apiResponse('User', 'socketHandler', false, ['body']));
 
 module.exports = router;
