@@ -10,8 +10,7 @@ let api   = require('./routes/api');
 let lib      = require('./lib');
 let app = express();
 
-const passport = require('./passport');
-const session = require('./session');
+const jwt = require('./jwt');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,8 +24,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-session.setup(app);
-passport.setup(app);
+jwt.setup(app);
 
 app.use('/', index);
 app.use('/api', api);

@@ -2,7 +2,6 @@
  * Created by ali71 on 14/08/2017.
  */
 var bluebird = require('bluebird');
-var redis_socket = require('socket.io-redis');
 var redis = require('redis');
 var env = require('../env');
 var redis_client = redis.createClient(env.isProd ? process.env.REDIS_URL : {
@@ -25,8 +24,10 @@ redis_client.on('error', (err) => {
 });
 
 let save = (key, value) => {
-  if(redisIsReady)
+  if(redisIsReady) {
     redis_client.setAsync(key, JSON.stringify(value));
+    setExpiration(key);
+  }
 };
 
 let get = (key) => {
@@ -40,11 +41,16 @@ let get = (key) => {
   })
 };
 
+//Set Expiration time to 6 minutes later
+let setExpiration = (key) => {
+  if(redisIsReady)
+    redis_client.expireAsync(key, 600);
+};
 
 module.exports = {
   redisIsReady,
   redis_client,
-  redis_socket,
   save,
   get,
+  setExpiration,
 };
