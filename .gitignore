@@ -16,6 +16,9 @@
 *.launch
 .settings/
 
+# env variable
+.env
+
 # misc
 /.sass-cache
 /connect.lock
