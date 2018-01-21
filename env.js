@@ -1,20 +1,26 @@
 const promise = Promise;
 const bCrypt = require('bcrypt-nodejs');
+const app = require('express')();
+let env = app.get('env');
 const options = {
   promiseLib: promise,
 };
 const pgp = require('pg-promise')(options);
-const app = require('express')();
-let env = app.get('env');
+
 if(env==='test')
   env='development';
+
 const isProd = env==='production';
 const isDev  = env==='development';
-const config = require('./config.json')[env];
-const connectionString = config.pgConnection + config.database;
-const test_db_name = config.database + '_test';
-const testConnectionString = config.pgConnection + test_db_name;
-const initDb =  pgp(config.pgConnection + config.initDb);
+
+if (isDev)
+  require('dotenv').config(); // loads env variables inside .env file into process.env
+
+
+const connectionString = process.env.PG_CONNECTION + process.env.DATABASE;
+const test_db_name = process.env.DATABASE + '_test';
+const testConnectionString = process.env.PG_CONNECTION + test_db_name;
+const initDb =  pgp(process.env.PG_CONNECTION + process.env.INIT_DB);
 const db = pgp(connectionString);
 const testDb = pgp(testConnectionString);
 const pgm = require('pg-monitor');
@@ -39,11 +45,10 @@ module.exports = {
   pgp: pgp,
   pgm: pgm,
   app: app,
-  config: config,
   db: db,
   testDb : testDb,
   initDb: initDb,
-  db_name: config.database,
+  db_name: process.env.DATABASE,
   test_db_name: test_db_name,
   isProd: isProd,
   isDev: isDev,
