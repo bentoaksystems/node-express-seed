@@ -19,6 +19,7 @@ services:
      - INIT_DB=postgres
      - REDIS_URL=redis
      - PORT=3000
+    command: node /node_app/dist/index.js 
     depends_on:
      - db
      - redis
