@@ -22,4 +22,4 @@ services:
     depends_on:
      - db
      - redis
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done ;node /node_app/dist/index.js ; npm start'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done ;node configure.js ; npm start'
