@@ -14,9 +14,12 @@ services:
     volumes:
      - .:/usr/src/app
     environment:
-     - DATABASE_URL=postgres://postgres:123456@db:5432/seed
+     - PG_CONNECTION=postgres://postgres:123456@db:5432/
+     - DATABASE=seed
+     - INIT_DB=postgres
+     - REDIS_URL=redis
      - PORT=3000
     depends_on:
      - db
      - redis
-    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done ; npm start'
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done ;node configure.js ; npm start'
