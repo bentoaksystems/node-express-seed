@@ -6,7 +6,6 @@
     "start": "node ./bin/www",
     "test": "jasmine;jasmine-node --verbose server_spec --forceexit --captureExceptions",
     "model_test": "jasmine",
-    "postinstall": "node configure.js"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
