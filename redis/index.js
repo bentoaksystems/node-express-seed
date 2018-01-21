@@ -6,6 +6,7 @@ var redis = require('redis');
 var env = require('../env');
 var redis_client = redis.createClient({
   host : env.redisURL,
+  password: env.redisPassword,
   socket_keepalive: true
 });
 

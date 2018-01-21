@@ -40,6 +40,7 @@ const pgm = require('pg-monitor');
 const color = require("cli-color");
 
 const redisURL = process.env.REDIS_URL;
+const redisPassword = process.env.REDIS_PASSWORD;
 
 
 const pgmTheme = {
@@ -68,5 +69,6 @@ module.exports = {
   test_db_name,
   isProd,
   isDev,
-  redisURL
+  redisURL,
+  redisPassword
 };
