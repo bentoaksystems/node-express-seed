@@ -14,7 +14,10 @@ services:
     volumes:
      - .:/usr/src/app
     environment:
-     - DATABASE_URL=postgres://postgres:123456@db:5432/seed
+     - PG_CONNECTION=postgres://postgres:123456@db:5432/
+     - DATABASE=seed
+     - INIT_DB=postgres
+     - REDIS_URL=redis
      - PORT=3000
     depends_on:
      - db
