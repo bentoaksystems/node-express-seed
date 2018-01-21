@@ -16,6 +16,7 @@ function sql(file) {
  * Put the SQL files for any new table/schema in a new directory
  * Use the same direcoty name for nesting the queries here.
  */
+
 module.exports = {
   db: {
     create:   sql('db/create.sql'),
