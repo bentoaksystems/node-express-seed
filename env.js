@@ -16,6 +16,19 @@ const isDev  = env==='development';
 if (isDev)
   require('dotenv').config(); // loads env variables inside .env file into process.env
 
+/**
+ * read environment variable form env.process
+ * in dev or test mode the enviornmnet variables are made from .env file
+ * .env file must at least contains:
+ * INIT_DB
+ * DATABASE
+ * PG_CONNECTION
+ * REDIS_URL
+ * for example:
+ * PG_CONNECTION=postgres://postgres:some_password@localhost:5432/
+ */
+
+
 
 const connectionString = process.env.PG_CONNECTION + process.env.DATABASE;
 const test_db_name = process.env.DATABASE + '_test';
