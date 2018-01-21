@@ -26,6 +26,9 @@ const testDb = pgp(testConnectionString);
 const pgm = require('pg-monitor');
 const color = require("cli-color");
 
+const redisURL = process.env.REDIS_URL;
+
+
 const pgmTheme = {
     time: color.bgBlack.whiteBright,
     value: color.black,
@@ -41,15 +44,16 @@ pgm.setTheme(pgmTheme); // selecting your own theme;
 pgm.attach(options);
 
 module.exports = {
-  bcrypt: bCrypt,
-  pgp: pgp,
-  pgm: pgm,
-  app: app,
-  db: db,
-  testDb : testDb,
-  initDb: initDb,
+  bCrypt,
+  pgp,
+  pgm,
+  app,
+  db,
+  testDb,
+  initDb,
   db_name: process.env.DATABASE,
-  test_db_name: test_db_name,
-  isProd: isProd,
-  isDev: isDev,
+  test_db_name,
+  isProd,
+  isDev,
+  redisURL
 };

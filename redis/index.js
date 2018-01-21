@@ -4,7 +4,8 @@
 var bluebird = require('bluebird');
 var redis = require('redis');
 var env = require('../env');
-var redis_client = redis.createClient(env.isProd ? process.env.REDIS_URL : {
+var redis_client = redis.createClient({
+  host : env.redisURL,
   socket_keepalive: true
 });
 
