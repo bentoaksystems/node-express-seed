@@ -30,17 +30,17 @@ if (isDev)
 
 
 
-const connectionString = process.env.PG_CONNECTION + process.env.DATABASE;
-const test_db_name = process.env.DATABASE + '_test';
-const testConnectionString = process.env.PG_CONNECTION + test_db_name;
-const initDb =  pgp(process.env.PG_CONNECTION + process.env.INIT_DB);
+const connectionString = getEnvValue(process.env.PG_CONNECTION) + getEnvValue(process.env.DATABASE);
+const test_db_name = getEnvValue(process.env.DATABASE + '_test');
+const testConnectionString = getEnvValue(process.env.PG_CONNECTION) + test_db_name;
+const initDb =  pgp(getEnvValue(process.env.PG_CONNECTION) + getEnvValue(process.env.INIT_DB));
 const db = pgp(connectionString);
 const testDb = pgp(testConnectionString);
 const pgm = require('pg-monitor');
 const color = require("cli-color");
 
-const redisURL = process.env.REDIS_URL;
-const redisPassword = process.env.REDIS_PASSWORD;
+const redisURL = getEnvValue(process.env.REDIS_URL);
+const redisPassword = getEnvValue(process.env.REDIS_PASSWORD);
 
 
 const pgmTheme = {
@@ -57,6 +57,21 @@ const pgmTheme = {
 pgm.setTheme(pgmTheme); // selecting your own theme;
 pgm.attach(options);
 
+/**
+ *  in some cases env var name which is declared in .env file is not compatible with server env var in production mode.
+ *  for example in Heroku the name of env var for database connection is DATABASE_URL, but it is declared as pg_connection in .env file
+ *  To resolve this if the name of env var contains !! at first, its value will be extracted from name after this two character
+ * @param procEnv
+ * @returns {*}
+ */
+function getEnvValue(procEnv) {
+  if (procEnv && procEnv.startsWith('!!'))
+    return process.env[procEnv.substring(2)]; // remove two first char (!!)
+  else
+    return procEnv;
+}
+
+
 module.exports = {
   bCrypt,
   pgp,
@@ -65,7 +80,7 @@ module.exports = {
   db,
   testDb,
   initDb,
-  db_name: process.env.DATABASE,
+  db_name: getEnvValue(process.env.DATABASE),
   test_db_name,
   isProd,
   isDev,
