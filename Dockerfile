@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:8
 # Working directory for application
 RUN mkdir /node_express_seed
 ADD . /node_express_seed
