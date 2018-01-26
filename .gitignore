@@ -37,3 +37,6 @@ build.cmd
 #System Files
 .DS_Store
 Thumbs.db
+
+# Docker
+docker-compose.yml
