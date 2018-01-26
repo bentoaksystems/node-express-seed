@@ -23,7 +23,7 @@ if (isDev)
  * INIT_DB
  * DATABASE
  * PG_CONNECTION
- * REDIS_URL
+ * REDIS_HOST
  * for example:
  * PG_CONNECTION=postgres://postgres:some_password@localhost:5432/
  */
@@ -39,7 +39,7 @@ const testDb = pgp(testConnectionString);
 const pgm = require('pg-monitor');
 const color = require("cli-color");
 
-const redisURL = getEnvValue(process.env.REDIS_URL);
+const redisHost = getEnvValue(process.env.REDIS_HOST);
 const redisPassword = getEnvValue(process.env.REDIS_PASSWORD);
 
 
@@ -84,6 +84,6 @@ module.exports = {
   test_db_name,
   isProd,
   isDev,
-  redisURL,
+  redisHost,
   redisPassword
 };
