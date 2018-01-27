@@ -14,7 +14,7 @@ pipeline {
     }
     stage('Test') {
       steps {
-        sh "jasmine-node --verbose spec/jasmine/sql.spec.js --forceexit --captureExceptions"
+        sh "npm test"
       }
     }
   }
