@@ -9,12 +9,12 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker-compose up'
+        sh "docker-compose up -d"
       }
     }
     stage('Test') {
       steps {
-        sh 'jasmine-node --verbose spec/jasmine/sql.spec.js --forceexit --captureExceptions'
+        sh "jasmine-node --verbose spec/jasmine/sql.spec.js --forceexit --captureExceptions"
       }
     }
   }
